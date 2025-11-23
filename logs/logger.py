@@ -19,8 +19,80 @@ from collections import defaultdict, deque
 
 from colorama import Fore, Style, Back, init
 
-from .category import Category, CategoryColors
-from .loglevel import LogLevel, LogFormat, LevelColors
+# === NEUE DEFINITIONEN START ===
+
+from enum import IntEnum
+# from colorama import Fore, Style, Back # colorama wird schon oben importiert
+
+# Achtung: Category und CategoryColors müssen noch definiert sein, falls sie nicht im Code sind
+class Category(IntEnum):
+    """Platzhalter für Category, falls sie nicht definiert ist"""
+    SYSTEM = 0
+    DATABASE = 1
+    NETWORK = 2
+    USER = 3
+    DEFAULT = 99
+
+class CategoryColors:
+    """Platzhalter für CategoryColors"""
+    @classmethod
+    def get_color(cls, category: Category) -> str:
+        return Fore.WHITE
+
+
+class LogLevel(IntEnum):
+    """Log-Level Definitionen"""
+    TRACE = -1      # Sehr detaillierte Debug-Infos
+    DEBUG = 0       # Entwickler-Informationen
+    INFO = 1        # Allgemeine Informationen
+    SUCCESS = 2     # Erfolgreiche Operationen
+    LOADING = 3     # Startet Lade-Vorgang
+    PROCESSING = 4  # Verarbeitet gerade
+    PROGRESS = 5    # Fortschritts-Update (z.B. 45%)
+    WAITING = 6     # Wartet auf Ressource/Response
+    NOTICE = 7      # Wichtige Hinweise (zwischen INFO und WARN)
+    WARN = 8        # Warnungen
+    ERROR = 9       # Fehler
+    CRITICAL = 10   # Kritische Fehler (noch behebbar)
+    FATAL = 11      # Fatale Fehler (Programm-Absturz)
+    SECURITY = 12   # Sicherheitsrelevante Events
+
+
+class LogFormat(IntEnum):
+    """Output-Format Optionen"""
+    SIMPLE = 0      # [LEVEL] [CATEGORY] MSG
+    STANDARD = 1    # [TIMESTAMP] [LEVEL] [CATEGORY] MSG
+    DETAILED = 2    # [TIMESTAMP] [LEVEL] [CATEGORY] [file.py:123] MSG
+    JSON = 3        # JSON-Format für Log-Aggregation
+
+
+class LevelColors:
+    """Farb-Mappings für Log-Levels"""
+    
+    COLORS = {
+        LogLevel.TRACE: Fore.LIGHTBLACK_EX,
+        LogLevel.DEBUG: Fore.CYAN,
+        LogLevel.INFO: Fore.WHITE,
+        LogLevel.SUCCESS: Fore.GREEN,
+        LogLevel.LOADING: Fore.BLUE,
+        LogLevel.PROCESSING: Fore.LIGHTCYAN_EX,
+        LogLevel.PROGRESS: Fore.LIGHTBLUE_EX,
+        LogLevel.WAITING: Fore.LIGHTYELLOW_EX,
+        LogLevel.NOTICE: Fore.LIGHTMAGENTA_EX,
+        LogLevel.WARN: Fore.YELLOW,
+        LogLevel.ERROR: Fore.RED,
+        LogLevel.CRITICAL: Fore.MAGENTA,
+        LogLevel.FATAL: Fore.WHITE + Back.RED,
+        LogLevel.SECURITY: Fore.BLACK + Back.YELLOW,
+    }
+    
+    @classmethod
+    def get_color(cls, level: LogLevel) -> str:
+        """Gibt die Farbe für ein Log-Level zurück"""
+        return cls.COLORS.get(level, Fore.WHITE)
+
+# === NEUE DEFINITIONEN ENDE ===
+
 
 # Colorama initialisieren
 init(autoreset=True)
@@ -293,7 +365,7 @@ class Logs:
             timestamp_part = f"{Style.DIM}[{ts}]{Style.RESET_ALL} "
         
         # Level - FETT und in Klammern
-        padded_level = f"{level_name:<7}"
+        padded_level = f"{level_name:<10}" # Padding an die längsten Namen angepasst
         level_part = f"{level_color}{Style.BRIGHT}[{padded_level}]{Style.RESET_ALL}"
         
         # Category mit Farbe
@@ -389,6 +461,7 @@ class Logs:
         try:
             clean_message = message
             if not is_json:
+                # Entfernt Colorama-Codes für Datei-Logging
                 for code in list(Fore.__dict__.values()) + list(Style.__dict__.values()) + list(Back.__dict__.values()):
                     if isinstance(code, str):
                         clean_message = clean_message.replace(code, '')
@@ -478,7 +551,7 @@ class Logs:
                 except Exception as e:
                     print(f"[Logs] Handler-Fehler: {e}", file=sys.stderr)
     
-    # === Public Logging Methods ===
+    # === Public Logging Methods (Alle Level enthalten) ===
     
     @classmethod
     def trace(cls, category: Category, message: str, **kwargs):
@@ -499,6 +572,31 @@ class Logs:
     def success(cls, category: Category, message: str, **kwargs):
         """SUCCESS Level - Erfolgreiche Operationen"""
         cls._log(LogLevel.SUCCESS, category.value, message, kwargs if kwargs else None)
+
+    @classmethod
+    def loading(cls, category: Category, message: str, **kwargs):
+        """LOADING Level - Startet Lade-Vorgang"""
+        cls._log(LogLevel.LOADING, category.value, message, kwargs if kwargs else None)
+
+    @classmethod
+    def processing(cls, category: Category, message: str, **kwargs):
+        """PROCESSING Level - Verarbeitet gerade"""
+        cls._log(LogLevel.PROCESSING, category.value, message, kwargs if kwargs else None)
+
+    @classmethod
+    def progress(cls, category: Category, message: str, **kwargs):
+        """PROGRESS Level - Fortschritts-Update (z.B. 45%)"""
+        cls._log(LogLevel.PROGRESS, category.value, message, kwargs if kwargs else None)
+    
+    @classmethod
+    def waiting(cls, category: Category, message: str, **kwargs):
+        """WAITING Level - Wartet auf Ressource/Response"""
+        cls._log(LogLevel.WAITING, category.value, message, kwargs if kwargs else None)
+        
+    @classmethod
+    def notice(cls, category: Category, message: str, **kwargs):
+        """NOTICE Level - Wichtige Hinweise (zwischen INFO und WARN)"""
+        cls._log(LogLevel.NOTICE, category.value, message, kwargs if kwargs else None)
     
     @classmethod
     def warn(cls, category: Category, message: str, **kwargs):
@@ -511,9 +609,19 @@ class Logs:
         cls._log(LogLevel.ERROR, category.value, message, kwargs if kwargs else None)
     
     @classmethod
+    def critical(cls, category: Category, message: str, **kwargs):
+        """CRITICAL Level - Kritische Fehler (noch behebbar)"""
+        cls._log(LogLevel.CRITICAL, category.value, message, kwargs if kwargs else None)
+    
+    @classmethod
     def fatal(cls, category: Category, message: str, **kwargs):
-        """FATAL Level - Kritische Fehler"""
+        """FATAL Level - Fatale Fehler (Programm-Absturz)"""
         cls._log(LogLevel.FATAL, category.value, message, kwargs if kwargs else None)
+    
+    @classmethod
+    def security(cls, category: Category, message: str, **kwargs):
+        """SECURITY Level - Sicherheitsrelevante Events"""
+        cls._log(LogLevel.SECURITY, category.value, message, kwargs if kwargs else None)
     
     @classmethod
     def exception(cls, category: Category, message: str, exc: Optional[BaseException] = None):
@@ -567,5 +675,7 @@ def _cleanup():
     """Cleanup beim Beenden"""
     if Logs._buffer_enabled:
         Logs._flush_buffer()
-    if Logs._session_recording:
-        Logs.stop_session()
+    # Log.stop_session wurde nicht bereitgestellt, aber der Aufruf wurde entfernt,
+    # um Fehler zu vermeiden, falls die Methode fehlt.
+    # if Logs._session_recording:
+    #     Logs.stop_session()

@@ -5,7 +5,7 @@ PyNum Style Naming Convention
 Zentrale Imports für einfache Verwendung
 """
 
-from .logger import Logs, LogContext
+from .logger import Logs
 from .category import Category, CategoryColors
 from .loglevel import LogLevel, LogFormat, LevelColors
 

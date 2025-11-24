@@ -1,5 +1,5 @@
 """
-logs.py
+logger.py
 
 Professional Terminal Logger mit erweiterten Features
 Ein vollständiger, produktionsreifer Logger, der log_categories.py importiert.
@@ -22,7 +22,7 @@ from enum import IntEnum, Enum
 from colorama import Fore, Style, Back, init
 
 # WICHTIG: Kategorien aus der separaten Datei importieren
-from category import Category, CategoryColors 
+from .category import Category, CategoryColors 
 
 # Colorama initialisieren
 init(autoreset=True)

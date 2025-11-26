@@ -1,3 +1,4 @@
+![Mein Logo](img/SimpleColoredLogs.png)
 # Professional Terminal Logger
 
 Ein vollständiger, produktionsreifer Logger mit erweiterten Features für Python-Anwendungen und Discord Bots.

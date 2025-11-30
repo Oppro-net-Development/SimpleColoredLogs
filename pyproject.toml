@@ -4,14 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "SimpleColoredLogs"
-version = "1.2.0"
+version = "1.2.1"
 description = "Ein vollständiger, produktionsreifer Logger mit erweiterten Features für Python-Anwendungen und Discord Bots."
 readme = {file = "README.md", content-type = "text/markdown"}
 authors = [
     {name = "OPPRO.NET Development" },
     {name = "OPPRO.NET Network" },
     {name = "LennyPegauOfficial117" }
-
 ]
 license = { file = "LICENSE" }
 classifiers = [
@@ -24,7 +23,14 @@ dependencies = [
     "colorama>=0.4.6"
 ]
 keywords = ["logger", "terminal", "python", "colored", "discord", "logs"]
+
 [project.urls]
 "Homepage" = "https://github.com/Medicopter117/SimpleColoredLogs"
 "Repository" = "https://github.com/Medicopter117/SimpleColoredLogs"
 "Bug Tracker" = "https://github.com/Medicopter117/SimpleColoredLogs/issues"
+
+[tool.setuptools.packages]
+# Sucht explizit nach Paketen in der "flachen" Top-Level-Struktur,
+# aber schränkt die Suche nicht auf nur ein Paket ein. 
+# setuptools sollte nun das Paket 'SimpleColoredLogs' korrekt finden.
+find = {}

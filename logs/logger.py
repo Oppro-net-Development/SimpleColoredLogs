@@ -295,6 +295,15 @@ class CategoryColors:
         Category.AUTH: Fore.RED,
         Category.SYSTEM: Fore.WHITE,
         Category.CONFIG: Fore.LIGHTMAGENTA_EX,
+        Category.SCHEMA: Fore.LIGHTBLUE_EX,
+        Category.INDEX: Fore.LIGHTCYAN_EX,
+        Category.QUERY: Fore.CYAN + Style.BRIGHT,
+        Category.VIEW: Fore.MAGENTA + Style.BRIGHT,
+        Category.TRANSACTION_COMMIT: Fore.GREEN + Style.BRIGHT,
+        Category.NOSQL: Fore.LIGHTYELLOW_EX,
+        Category.RELATIONAL_DB: Fore.LIGHTMAGENTA_EX,
+        Category.SESSION_STORAGE: Fore.LIGHTGREEN_EX,
+
         
         # Network & Communication
         Category.NETWORK: Fore.LIGHTBLUE_EX,
@@ -304,6 +313,11 @@ class CategoryColors:
         Category.GRAPHQL: Fore.MAGENTA + Style.BRIGHT,
         Category.REST: Fore.BLUE,
         Category.SOAP: Fore.LIGHTBLUE_EX,
+        Category.LOAD_BALANCER: Fore.YELLOW + Style.BRIGHT,
+        Category.REVERSE_PROXY: Fore.CYAN + Style.BRIGHT,
+        Category.DNS: Fore.LIGHTGREEN_EX,
+        Category.CDN: Fore.MAGENTA + Style.BRIGHT,
+
         
         # Security & Compliance
         Category.SECURITY: Fore.LIGHTRED_EX,
@@ -312,6 +326,21 @@ class CategoryColors:
         Category.AUDIT: Fore.LIGHTRED_EX,
         Category.COMPLIANCE: Fore.MAGENTA,
         Category.VULNERABILITY: Fore.RED + Back.WHITE,
+        Category.GDPR: Fore.YELLOW,
+        Category.HIPAA: Fore.YELLOW + Style.BRIGHT,
+        Category.PCI_DSS: Fore.RED + Style.BRIGHT,
+        Category.IDP: Fore.CYAN,
+        Category.MFA: Fore.LIGHTCYAN_EX,
+        Category.RATE_LIMITER: Fore.YELLOW + Style.BRIGHT,
+        # Frontend & User Interface
+        Category.CLIENT: Fore.LIGHTBLUE_EX,
+        Category.UI: Fore.MAGENTA,
+        Category.UX: Fore.LIGHTMAGENTA_EX,
+        Category.SPA: Fore.CYAN + Style.BRIGHT,
+        Category.SSR: Fore.BLUE + Style.BRIGHT,
+        Category.STATE: Fore.LIGHTYELLOW_EX,
+        Category.COMPONENT: Fore.MAGENTA + Style.BRIGHT,
+
         
         # Storage & Files
         Category.FILE: Fore.LIGHTGREEN_EX,
@@ -320,6 +349,7 @@ class CategoryColors:
         Category.SYNC: Fore.CYAN,
         Category.UPLOAD: Fore.GREEN + Style.BRIGHT,
         Category.DOWNLOAD: Fore.LIGHTGREEN_EX,
+
         
         # Messaging & Events
         Category.QUEUE: Fore.LIGHTCYAN_EX,
@@ -385,6 +415,12 @@ class CategoryColors:
         Category.KUBERNETES: Fore.LIGHTBLUE_EX,
         Category.TERRAFORM: Fore.MAGENTA,
         Category.ANSIBLE: Fore.RED,
+        Category.SERVERLESS: Fore.CYAN + Style.BRIGHT,
+        Category.CONTAINER: Fore.LIGHTCYAN_EX,
+        Category.IAC: Fore.YELLOW,
+        Category.VPC: Fore.LIGHTYELLOW_EX,
+        Category.AUTOSCALING: Fore.GREEN + Style.BRIGHT,
+        
         
         # Testing & Quality
         Category.TEST: Fore.YELLOW,

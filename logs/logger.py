@@ -117,6 +117,11 @@ class Category(str, Enum):
     RELATIONAL_DB = "RELATIONAL_DB"
     SESSION_STORAGE = "SESSION_STORAGE"
 
+    # === NEU: Runtime & Core System Erweitungen ===
+    RUNTIME = "RUNTIME"
+    COMPILER = "COMPILER"
+    DEPENDENCY = "DEPENDENCY"
+    CLI = "CLI"
     
     # === Network & Communication ===
     NETWORK = "NETWORK"
@@ -131,6 +136,9 @@ class Category(str, Enum):
     DNS = "DNS"
     CDN = "CDN"
     
+    # === NEU: Geolocation ===
+    GEOLOCATION = "GEOLOCATION"
+    
     # === Security & Compliance ===
     SECURITY = "SECURITY"
     ENCRYPTION = "ENCRYPTION"
@@ -144,6 +152,10 @@ class Category(str, Enum):
     IDP = "IDP"
     MFA = "MFA"
     RATE_LIMITER = "RATE_LIMITER"
+    
+    # === NEU: Fraud & Business Security ===
+    FRAUD = "FRAUD"
+    
     # === Frontend & User Interface ===
     CLIENT = "CLIENT"
     UI = "UI"
@@ -152,6 +164,10 @@ class Category(str, Enum):
     SSR = "SSR"
     STATE = "STATE"
     COMPONENT = "COMPONENT"
+
+    # === NEU: Internationalisierung ===
+    I18N = "I18N"
+    
     # === Storage & Files ===
     FILE = "FILE"
     STORAGE = "STORAGE"
@@ -159,6 +175,9 @@ class Category(str, Enum):
     SYNC = "SYNC"
     UPLOAD = "UPLOAD"
     DOWNLOAD = "DOWNLOAD"
+
+    # === NEU: Assets ===
+    ASSET = "ASSET"
     
     # === Messaging & Events ===
     QUEUE = "QUEUE"
@@ -193,6 +212,11 @@ class Category(str, Enum):
     SCHEDULER = "SCHEDULER"
     BATCH = "BATCH"
     STREAM = "STREAM"
+
+    # === NEU: Data Transformation & Reporting ===
+    MAPPING = "MAPPING"
+    TRANSFORM = "TRANSFORM"
+    REPORTING = "REPORTING"
     
     # === Business Logic ===
     BUSINESS = "BUSINESS"
@@ -201,6 +225,10 @@ class Category(str, Enum):
     ORDER = "ORDER"
     INVOICE = "INVOICE"
     SHIPPING = "SHIPPING"
+    
+    # === NEU: Business Finanzen & Bestand ===
+    ACCOUNTING = "ACCOUNTING"
+    INVENTORY = "INVENTORY"
     
     # === User Management ===
     USER = "USER"
@@ -230,6 +258,9 @@ class Category(str, Enum):
     VPC = "VPC"
     AUTOSCALING = "AUTOSCALING"
 
+    # === NEU: IaC Provisioning ===
+    PROVISION = "PROVISION"
+    DEPROVISION = "DEPROVISION"
     
     # === Testing & Quality ===
     TEST = "TEST"
@@ -282,7 +313,6 @@ class Category(str, Enum):
     VERSION = "VERSION"
 
 
-
 class CategoryColors:
     """Farb-Mappings für Kategorien"""
     
@@ -304,6 +334,12 @@ class CategoryColors:
         Category.RELATIONAL_DB: Fore.LIGHTMAGENTA_EX,
         Category.SESSION_STORAGE: Fore.LIGHTGREEN_EX,
 
+        # NEU: Runtime & Core System Erweitungen
+        Category.RUNTIME: Fore.YELLOW + Style.BRIGHT,
+        Category.COMPILER: Fore.LIGHTBLUE_EX + Style.BRIGHT,
+        Category.DEPENDENCY: Fore.LIGHTCYAN_EX,
+        Category.CLI: Fore.WHITE + Style.BRIGHT,
+
         
         # Network & Communication
         Category.NETWORK: Fore.LIGHTBLUE_EX,
@@ -317,6 +353,9 @@ class CategoryColors:
         Category.REVERSE_PROXY: Fore.CYAN + Style.BRIGHT,
         Category.DNS: Fore.LIGHTGREEN_EX,
         Category.CDN: Fore.MAGENTA + Style.BRIGHT,
+
+        # NEU: Geolocation
+        Category.GEOLOCATION: Fore.LIGHTYELLOW_EX,
 
         
         # Security & Compliance
@@ -332,6 +371,10 @@ class CategoryColors:
         Category.IDP: Fore.CYAN,
         Category.MFA: Fore.LIGHTCYAN_EX,
         Category.RATE_LIMITER: Fore.YELLOW + Style.BRIGHT,
+
+        # NEU: Fraud
+        Category.FRAUD: Fore.RED + Back.YELLOW,
+        
         # Frontend & User Interface
         Category.CLIENT: Fore.LIGHTBLUE_EX,
         Category.UI: Fore.MAGENTA,
@@ -341,6 +384,9 @@ class CategoryColors:
         Category.STATE: Fore.LIGHTYELLOW_EX,
         Category.COMPONENT: Fore.MAGENTA + Style.BRIGHT,
 
+        # NEU: Internationalisierung
+        Category.I18N: Fore.RED,
+
         
         # Storage & Files
         Category.FILE: Fore.LIGHTGREEN_EX,
@@ -349,6 +395,9 @@ class CategoryColors:
         Category.SYNC: Fore.CYAN,
         Category.UPLOAD: Fore.GREEN + Style.BRIGHT,
         Category.DOWNLOAD: Fore.LIGHTGREEN_EX,
+
+        # NEU: Assets
+        Category.ASSET: Fore.MAGENTA,
 
         
         # Messaging & Events
@@ -384,6 +433,11 @@ class CategoryColors:
         Category.SCHEDULER: Fore.LIGHTYELLOW_EX,
         Category.BATCH: Fore.LIGHTMAGENTA_EX,
         Category.STREAM: Fore.LIGHTCYAN_EX,
+
+        # NEU: Data Transformation & Reporting
+        Category.MAPPING: Fore.GREEN,
+        Category.TRANSFORM: Fore.CYAN,
+        Category.REPORTING: Fore.LIGHTGREEN_EX,
         
         # Business Logic
         Category.BUSINESS: Fore.WHITE + Style.BRIGHT,
@@ -392,6 +446,10 @@ class CategoryColors:
         Category.ORDER: Fore.LIGHTGREEN_EX,
         Category.INVOICE: Fore.LIGHTYELLOW_EX,
         Category.SHIPPING: Fore.LIGHTBLUE_EX,
+        
+        # NEU: Business Finanzen & Bestand
+        Category.ACCOUNTING: Fore.GREEN + Back.BLACK,
+        Category.INVENTORY: Fore.LIGHTMAGENTA_EX,
         
         # User Management
         Category.USER: Fore.LIGHTMAGENTA_EX,
@@ -420,6 +478,10 @@ class CategoryColors:
         Category.IAC: Fore.YELLOW,
         Category.VPC: Fore.LIGHTYELLOW_EX,
         Category.AUTOSCALING: Fore.GREEN + Style.BRIGHT,
+
+        # NEU: IaC Provisioning
+        Category.PROVISION: Fore.LIGHTGREEN_EX + Style.BRIGHT,
+        Category.DEPROVISION: Fore.RED + Style.BRIGHT,
         
         
         # Testing & Quality
@@ -634,7 +696,7 @@ class Logs:
             if current_rate > cls._noise_threshold:
                 if cls.min_level < LogLevel.WARN:
                     cls.min_level = LogLevel.WARN
-                    cls.warn(Category.SYSTEM, f"Auto-adjusted log level to WARN (rate: {current_rate:.1f}/min)")
+                    # cls.warn(Category.SYSTEM, f"Auto-adjusted log level to WARN (rate: {current_rate:.1f}/min)") # INTERNES LOG ENTFERNT
     
     @classmethod
     def _send_to_remote(cls, message: str):
@@ -645,7 +707,7 @@ class Logs:
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             sock.settimeout(1)
-            sock.sendto(message.encode('utf-8'), (cls._remote_host, cls._remote_port))
+            sock.sendto(message.encode('utf-8'), (cls._remote_host, cls._remote_port),)
             sock.close()
         except Exception:
             pass
@@ -876,20 +938,6 @@ class Logs:
         
         # Datei-Log (gepuffert oder direkt)
         if cls.log_file:
-            # ACHTUNG: Wenn wir hier loggen, müssen wir sicherstellen, dass category.value existiert
-            # Das ist durch den Fix in _log garantiert, aber bei _output rufen wir _format_json nicht erneut mit category auf
-            # Daher müssen wir beim Schreibvorgang hier nicht viel tun, außer aufpassen.
-            
-            # Da wir den Log-Line String für die Datei separat generieren wollen (ohne Farben),
-            # und _log schon durch ist, ist das hier etwas redundant gelöst in der Original-Klasse.
-            # Wir bauen hier eine vereinfachte Log-Line für die Datei.
-            pass 
-            
-            # Wir nutzen den Puffer oder schreiben direkt. 
-            # HINWEIS: Der Original-Code erzeugte hier einen neuen Log-Eintrag für die Datei.
-            # Das war etwas ineffizient. Besser wäre es, den "cleanen" String aus _log zu übergeben.
-            # Aber um die Struktur zu erhalten:
-            
             # Wir entfernen ANSI Codes vom Message string für das File
             clean_msg = re.sub(r'\x1b\[[0-9;]*m', '', message)
             
@@ -940,7 +988,7 @@ class Logs:
             # Aktuelle Datei umbenennen zu .1
             cls.log_file.rename(cls.log_file.with_suffix(f"{cls.log_file.suffix}.1"))
             
-        cls.info(Category.SYSTEM, f"Logdatei rotiert: {cls.log_file.name}")
+        # cls.info(Category.SYSTEM, f"Logdatei rotiert: {cls.log_file.name}") # INTERNES LOG ENTFERNT
         cls._compress_old_logs()
 
     @classmethod
@@ -1052,6 +1100,58 @@ class Logs:
     
     # === Konfigurationsmethoden ===
     
+    _custom_formats: ClassVar[Dict[LogLevel, str]] = {}
+    
+    @classmethod
+    def _format_custom(cls, level: LogLevel, category: Category, message: str, metadata: Dict[str, Any], extra: Optional[Dict] = None) -> str:
+        """Formatiert Log mit benutzerdefiniertem String (Format-String aus _custom_formats)"""
+        # ... (deine Implementierung für custom format) ...
+        # (Da diese Methode im bereitgestellten Code fehlte, gehe ich davon aus, dass sie noch implementiert werden muss)
+        # Für die Korrektheit des Loggers ist es besser, auf _format_colored zurückzugreifen, wenn kein Custom-Format gesetzt ist.
+        
+        format_string = cls._custom_formats.get(level)
+        if not format_string:
+            return cls._format_colored(level, category, message, metadata, extra)
+
+        # Vorbereiten der Platzhalter-Werte, inklusive Farb-Tags
+        level_color = LevelColors.get_color(level)
+        category_color = CategoryColors.get_color(category)
+        msg_color = Fore.RED if level >= LogLevel.ERROR else cls.message_color
+        
+        placeholders = {
+            "timestamp": datetime.now().strftime(cls.timestamp_format),
+            "level.name": f"{level_color}{Style.BRIGHT}{level.name}{Style.RESET_ALL}",
+            "category.value": f"{category_color}{category.value}{Style.RESET_ALL}",
+            "message": f"{msg_color}{message}{Style.RESET_ALL}",
+            "file": metadata.get("file", ""),
+            "line": metadata.get("line", 0),
+            "function": metadata.get("function", "")
+        }
+
+        # Format-String ersetzen
+        formatted_message = format_string
+        for key, value in placeholders.items():
+            # Verwende eine einfache String-Ersetzung, da f-string style keys verwendet werden
+            formatted_message = formatted_message.replace(f"{{{key}}}", str(value))
+        
+        return formatted_message
+
+
+    @classmethod
+    def set_custom_format(cls, level: LogLevel, format_string: str):
+        """
+        Definiert einen benutzerdefinierten Format-String für ein spezifisches Log-Level.
+        
+        Der String kann Platzhalter wie {timestamp}, {level.name}, {category.value}, 
+        {message}, {file}, {line} verwenden.
+        """
+        if not isinstance(level, LogLevel):
+            raise TypeError("Der Parameter 'level' muss ein LogLevel-Enum sein.")
+            
+        with cls._lock:
+            cls._custom_formats[level] = format_string
+            # Interne Log-Meldung entfernt
+
     @classmethod
     def configure(cls, 
                   min_level: LogLevel = LogLevel.DEBUG, 
@@ -1111,7 +1211,7 @@ class Logs:
             cls._session_recording = True
             cls._session_logs = []
             cls._session_start = datetime.now()
-            cls.info(Category.SYSTEM, "Session-Recording gestartet.")
+            # cls.info(Category.SYSTEM, "Session-Recording gestartet.") # INTERNES LOG ENTFERNT
             
     @classmethod
     def stop_session_recording(cls) -> List[Dict[str, Any]]:
@@ -1119,7 +1219,7 @@ class Logs:
         with cls._lock:
             if cls._session_recording:
                 cls._session_recording = False
-                cls.info(Category.SYSTEM, f"Session-Recording beendet. {len(cls._session_logs)} Einträge gesammelt.")
+                # cls.info(Category.SYSTEM, f"Session-Recording beendet. {len(cls._session_logs)} Einträge gesammelt.") # INTERNES LOG ENTFERNT
                 return cls._session_logs
             return []
 

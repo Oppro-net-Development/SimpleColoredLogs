@@ -8,7 +8,7 @@ Ein vollständiger, produktionsreifer Logger mit erweiterten Features für Pytho
 
 ## 🚀 Features
 
-- 🎨 **Farbige Terminal-Ausgabe** mit 90+ vordefinierten Kategorien
+- 🎨 **Farbige Terminal-Ausgabe** mit 100+ vordefinierten Kategorien
 - 📁 **File-Logging** mit automatischer Rotation und Kompression
 - 🎯 **13 Log-Levels** von TRACE bis SECURITY mit Status-Tracking
 - 🧵 **Thread-safe** mit Lock-Mechanismus
@@ -156,13 +156,17 @@ Logs.table(Category.METRICS,
 ## 🎨 Verfügbare Kategorien
 
 ### Core System
-`API`, `DATABASE`, `SERVER`, `CACHE`, `AUTH`, `SYSTEM`, `CONFIG`
+`API`, `DATABASE`, `SERVER`, `CACHE`, `AUTH`, `SYSTEM`, `CONFIG`, `SCHEMA`, `INDEX`, `QUERY`, `VIEW`, `TRANSACTION_COMMIT`, `NOSQL`,
+`RELATIONAL_DB`, `SESSION_STORAGE`
 
 ### Network & Communication
-`NETWORK`, `HTTP`, `WEBSOCKET`, `GRPC`, `GRAPHQL`, `REST`, `SOAP`
+`NETWORK`, `HTTP`, `WEBSOCKET`, `GRPC`, `GRAPHQL`, `REST`, `SOAP`, `LOAD_BALANCER`, `REVERSE_PROXY`, `DNS`, `CDN`
 
 ### Security & Compliance
-`SECURITY`, `ENCRYPTION`, `FIREWALL`, `AUDIT`, `COMPLIANCE`, `VULNERABILITY`
+`SECURITY`, `ENCRYPTION`, `FIREWALL`, `AUDIT`, `COMPLIANCE`, `VULNERABILITY`, `GDPR`, `HIPAA`, `PCI_DSS`, `IDP`, `MFA`, `RATE_LIMITER`
+
+### Frontend & User Interface
+`CLIENT`, `UI`, `UX`, `SPA`, `SSR`, `STATE`, `COMPONENT`
 
 ### Storage & Files
 `FILE`, `STORAGE`, `BACKUP`, `SYNC`, `UPLOAD`, `DOWNLOAD`
@@ -189,7 +193,7 @@ Logs.table(Category.METRICS,
 `AI`, `ML`, `TRAINING`, `INFERENCE`, `MODEL`
 
 ### DevOps & Infrastructure
-`DEPLOY`, `CI_CD`, `DOCKER`, `KUBERNETES`, `TERRAFORM`, `ANSIBLE`
+`DEPLOY`, `CI_CD`, `DOCKER`, `KUBERNETES`, `TERRAFORM`, `ANSIBLE`, `SERVERLESS`, `CONTAINER`, `IAC`, `VPC` `AUTOSCALING` 
 
 ### Testing & Quality
 `TEST`, `UNITTEST`, `INTEGRATION`, `E2E`, `LOAD_TEST`
@@ -201,7 +205,7 @@ Logs.table(Category.METRICS,
 `BOT`, `COGS`, `COMMANDS`, `EVENTS`, `VOICE`, `GUILD`, `MEMBER`, `CHANNEL`, `MESSAGE`, `REACTION`, `MODERATION`, `PERMISSIONS`, `EMBED`, `SLASH_CMD`, `BUTTON`, `MODAL`, `SELECT_MENU`, `AUTOMOD`, `WEBHOOK`, `PRESENCE`, `INTENTS`, `SHARDING`, `GATEWAY`, `RATELIMIT`
 
 ### Development
-`DEBUG`, `DEV`, `STARTUP`, `SHUTDOWN`, `MIGRATION`
+`DEBUG`, `DEV`, `STARTUP`, `SHUTDOWN`, `MIGRATION`, `UPDATE`, `VERSION`
 
 ## 🔒 Security Features
 

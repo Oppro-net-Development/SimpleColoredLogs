@@ -108,6 +108,15 @@ class Category(str, Enum):
     AUTH = "AUTH"
     SYSTEM = "SYSTEM"
     CONFIG = "CONFIG"
+    SCHEMA = "SCHEMA"
+    INDEX = "INDEX"
+    QUERY = "QUERY"
+    VIEW = "VIEW"
+    TRANSACTION_COMMIT = "TRANSACTION_COMMIT"
+    NOSQL = "NOSQL"
+    RELATIONAL_DB = "RELATIONAL_DB"
+    SESSION_STORAGE = "SESSION_STORAGE"
+
     
     # === Network & Communication ===
     NETWORK = "NETWORK"
@@ -117,6 +126,10 @@ class Category(str, Enum):
     GRAPHQL = "GRAPHQL"
     REST = "REST"
     SOAP = "SOAP"
+    LOAD_BALANCER = "LOAD_BALANCER"
+    REVERSE_PROXY = "REVERSE_PROXY"
+    DNS = "DNS"
+    CDN = "CDN"
     
     # === Security & Compliance ===
     SECURITY = "SECURITY"
@@ -125,7 +138,20 @@ class Category(str, Enum):
     AUDIT = "AUDIT"
     COMPLIANCE = "COMPLIANCE"
     VULNERABILITY = "VULNERABILITY"
-    
+    GDPR = "GDPR"
+    HIPAA = "HIPAA"
+    PCI_DSS = "PCI_DSS"
+    IDP = "IDP"
+    MFA = "MFA"
+    RATE_LIMITER = "RATE_LIMITER"
+    # === Frontend & User Interface ===
+    CLIENT = "CLIENT"
+    UI = "UI"
+    UX = "UX"
+    SPA = "SPA"
+    SSR = "SSR"
+    STATE = "STATE"
+    COMPONENT = "COMPONENT"
     # === Storage & Files ===
     FILE = "FILE"
     STORAGE = "STORAGE"
@@ -198,6 +224,12 @@ class Category(str, Enum):
     KUBERNETES = "K8S"
     TERRAFORM = "TERRAFORM"
     ANSIBLE = "ANSIBLE"
+    SERVERLESS = "SERVERLESS"
+    CONTAINER = "CONTAINER"
+    IAC = "IAC"
+    VPC = "VPC"
+    AUTOSCALING = "AUTOSCALING"
+
     
     # === Testing & Quality ===
     TEST = "TEST"
@@ -246,6 +278,9 @@ class Category(str, Enum):
     STARTUP = "STARTUP"
     SHUTDOWN = "SHUTDOWN"
     MIGRATION = "MIGRATION"
+    UPDATE = "UPDATE"
+    VERSION = "VERSION"
+
 
 
 class CategoryColors:
@@ -398,6 +433,8 @@ class CategoryColors:
         Category.STARTUP: Fore.GREEN,
         Category.SHUTDOWN: Fore.RED,
         Category.MIGRATION: Fore.LIGHTYELLOW_EX,
+        Category.UPDATE: Fore.MAGENTA,
+        Category.VERSION: Fore.LIGHTGREEN_EX,
     }
     
     @classmethod

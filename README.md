@@ -8,7 +8,7 @@ Ein vollständiger, produktionsreifer Logger mit erweiterten Features für Pytho
 
 ## 🚀 Features
 
-  - 🎨 **Farbige Terminal-Ausgabe** mit **148** vordefinierten Kategorien
+  - 🎨 **Farbige Terminal-Ausgabe** mit **162** vordefinierten Kategorien
   - 📁 **File-Logging** mit automatischer Rotation und Kompression
   - 🎯 **13 Log-Levels** von TRACE bis SECURITY mit Status-Tracking
   - 🧵 **Thread-safe** mit Lock-Mechanismus

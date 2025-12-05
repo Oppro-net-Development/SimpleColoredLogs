@@ -4,6 +4,7 @@ logger.py
 Professional Terminal Logger mit erweiterten Features
 Standalone-Version: Enthält LogLevels, Categories und die Logs-Klasse in einer Datei.
 Fix: Robustheit gegenüber String-Inputs als Kategorien.
+Erweiterung: Konfiguration über Umgebungsvariablen.
 """
 
 import sys
@@ -545,7 +546,7 @@ class CategoryColors:
 # TEIL 3: HAUPT-LOGGING KLASSE
 # ==========================================
 
-class Logs:
+class logger:
     """
     Professional Terminal Logger mit erweiterten Features
     """
@@ -634,6 +635,70 @@ class Logs:
     _category_count: Dict[str, int] = defaultdict(int)
     _error_count_by_category: Dict[str, int] = defaultdict(int)
     
+    
+    @classmethod
+    def _load_env_config(cls):
+        """Lädt Konfigurationseinstellungen aus Umgebungsvariablen."""
+        # MIN_LEVEL
+        env_level = os.environ.get('LOG_MIN_LEVEL')
+        if env_level:
+            try:
+                cls.min_level = LogLevel[env_level.upper()]
+            except KeyError:
+                # print(f"[Logs] WARN: Unbekanntes Log-Level in LOG_MIN_LEVEL: {env_level}", file=sys.stderr)
+                pass
+
+        # LOG_FILE
+        env_file = os.environ.get('LOG_FILE')
+        if env_file:
+            cls.log_file = Path(env_file)
+            if cls.log_file.parent:
+                cls.log_file.parent.mkdir(parents=True, exist_ok=True)
+        
+        # FORMAT_TYPE
+        env_format = os.environ.get('LOG_FORMAT')
+        if env_format:
+            try:
+                cls.format_type = LogFormat[env_format.upper()]
+            except KeyError:
+                # print(f"[Logs] WARN: Unbekanntes Log-Format in LOG_FORMAT: {env_format}", file=sys.stderr)
+                pass
+                
+        # COLORIZE
+        env_colorize = os.environ.get('LOG_COLORIZE')
+        if env_colorize is not None:
+            cls.colorize = env_colorize.lower() in ('true', '1', 'on')
+            
+        # SHOW_METADATA
+        env_metadata = os.environ.get('LOG_SHOW_METADATA')
+        if env_metadata is not None:
+            cls.show_metadata = env_metadata.lower() in ('true', '1', 'on')
+            
+        # SAMPLING_RATE
+        env_sampling = os.environ.get('LOG_SAMPLING_RATE')
+        if env_sampling is not None:
+            try:
+                rate = float(env_sampling)
+                cls._sampling_rate = max(0.0, min(1.0, rate))
+            except ValueError:
+                # print(f"[Logs] WARN: Ungültiger Wert für LOG_SAMPLING_RATE: {env_sampling}", file=sys.stderr)
+                pass
+                
+        # REMOTE_HOST
+        env_remote_host = os.environ.get('LOG_REMOTE_HOST')
+        if env_remote_host:
+            cls._remote_host = env_remote_host
+            cls._remote_enabled = True # Aktivieren, wenn Host gesetzt ist
+            
+        # REMOTE_PORT
+        env_remote_port = os.environ.get('LOG_REMOTE_PORT')
+        if env_remote_port:
+            try:
+                cls._remote_port = int(env_remote_port)
+            except ValueError:
+                pass
+
+
     @classmethod
     def _redact_sensitive_data(cls, message: str) -> str:
         """Entfernt sensible Daten aus Log-Messages"""
@@ -827,9 +892,11 @@ class Logs:
         return f"{timestamp_part}{level_part} {category_part} {thread_part}{tracing_part}{metadata_part}{context_part}{extra_part}{message_part}"
     
     @classmethod
-    def _should_log_category(cls, category: Category) -> bool:
+    def _should_log_category(cls, category: Union[Category, object]) -> bool:
         """Prüft ob Kategorie geloggt werden soll"""
-        category_str = category.value
+        # Annahme: category ist entweder ein Category-Enum oder das CustomCategory-Objekt
+        category_str = str(category.value) if hasattr(category, 'value') else str(category)
+        
         if category_str in cls._excluded_categories:
             return False
         if cls._category_filter and category_str not in cls._category_filter:
@@ -837,10 +904,11 @@ class Logs:
         return True
     
     @classmethod
-    def _trigger_alerts(cls, level: LogLevel, category: Category, message: str):
+    def _trigger_alerts(cls, level: LogLevel, category: Union[Category, object], message: str):
         """Triggert Alert-Handler für kritische Logs"""
         if level in cls._alert_handlers:
-            alert_key = f"{level.name}:{category.value}"
+            category_value = str(category.value) if hasattr(category, 'value') else str(category)
+            alert_key = f"{level.name}:{category_value}"
             current_time = time.time()
             
             if alert_key in cls._alert_cooldown:
@@ -851,7 +919,7 @@ class Logs:
             
             for handler in cls._alert_handlers[level]:
                 try:
-                    handler(level, category.value, message)
+                    handler(level, category_value, message)
                 except Exception as e:
                     print(f"[Logs] Alert-Handler-Fehler: {e}", file=sys.stderr)
     
@@ -863,17 +931,18 @@ class Logs:
             return
         
         # --- FIX: Robustheit gegenüber String-Inputs ---
+        is_custom_category = False
         if isinstance(category, str):
             try:
                 # Versuche, den String in ein Category-Enum umzuwandeln (z.B. "API")
                 category = Category(category)
             except ValueError:
                 # Fallback für unbekannte Strings (z.B. "INIT"): 
-                # Erstelle ein Pseudo-Objekt, das .value besitzt, damit der Code nicht crasht
                 class CustomCategory:
                     def __init__(self, name): self.value = name; self.name = name
                     def __str__(self): return self.value
                 category = CustomCategory(category)
+                is_custom_category = True
         # -----------------------------------------------
 
         if not cls._should_log_category(category):
@@ -882,7 +951,8 @@ class Logs:
         if not cls._should_sample():
             return
             
-        if not cls._check_rate_limit(category.value):
+        category_value = str(category.value) if not is_custom_category else category.value
+        if not cls._check_rate_limit(category_value):
             return
             
         cls._auto_adjust_log_level()
@@ -896,7 +966,10 @@ class Logs:
             
             # 3. Formatieren
             if cls.format_type == LogFormat.JSON:
+                # Für JSON-Formatierung muss 'category' ein echtes Category-Enum oder CustomCategory sein
                 formatted_message = cls._format_json(level, category, message, metadata, extra)
+            elif level in cls._custom_formats:
+                formatted_message = cls._format_custom(level, category, message, metadata, extra)
             else:
                 formatted_message = cls._format_colored(level, category, message, metadata, extra)
             
@@ -905,16 +978,16 @@ class Logs:
             
             # 5. Zähler und Speicherung aktualisieren
             cls._log_count[level] += 1
-            cls._category_count[category.value] += 1
+            cls._category_count[category_value] += 1
             if level >= LogLevel.ERROR:
-                cls._error_count_by_category[category.value] += 1
+                cls._error_count_by_category[category_value] += 1
             
             # 6. Session Recording
             if cls._session_recording:
                 cls._session_logs.append({
                     "timestamp": datetime.now().isoformat(),
                     "level": level.name,
-                    "category": category.value,
+                    "category": category_value,
                     "message": message,
                     **metadata
                 })
@@ -1103,11 +1176,8 @@ class Logs:
     _custom_formats: ClassVar[Dict[LogLevel, str]] = {}
     
     @classmethod
-    def _format_custom(cls, level: LogLevel, category: Category, message: str, metadata: Dict[str, Any], extra: Optional[Dict] = None) -> str:
+    def _format_custom(cls, level: LogLevel, category: Union[Category, object], message: str, metadata: Dict[str, Any], extra: Optional[Dict] = None) -> str:
         """Formatiert Log mit benutzerdefiniertem String (Format-String aus _custom_formats)"""
-        # ... (deine Implementierung für custom format) ...
-        # (Da diese Methode im bereitgestellten Code fehlte, gehe ich davon aus, dass sie noch implementiert werden muss)
-        # Für die Korrektheit des Loggers ist es besser, auf _format_colored zurückzugreifen, wenn kein Custom-Format gesetzt ist.
         
         format_string = cls._custom_formats.get(level)
         if not format_string:
@@ -1115,13 +1185,15 @@ class Logs:
 
         # Vorbereiten der Platzhalter-Werte, inklusive Farb-Tags
         level_color = LevelColors.get_color(level)
-        category_color = CategoryColors.get_color(category)
+        category_color = CategoryColors.get_color(category) # Funktioniert auch mit CustomCategory-Objekten
         msg_color = Fore.RED if level >= LogLevel.ERROR else cls.message_color
+        
+        category_value = str(category.value) if hasattr(category, 'value') else str(category)
         
         placeholders = {
             "timestamp": datetime.now().strftime(cls.timestamp_format),
             "level.name": f"{level_color}{Style.BRIGHT}{level.name}{Style.RESET_ALL}",
-            "category.value": f"{category_color}{category.value}{Style.RESET_ALL}",
+            "category.value": f"{category_color}{category_value}{Style.RESET_ALL}",
             "message": f"{msg_color}{message}{Style.RESET_ALL}",
             "file": metadata.get("file", ""),
             "line": metadata.get("line", 0),
@@ -1166,11 +1238,13 @@ class Logs:
                   remote_port: int = 514,
                   category_filter: Optional[List[Category]] = None,
                   exclude_categories: Optional[List[Category]] = None,
-                  sampling_rate: float = 1.0
+                  sampling_rate: float = 1.0,
+                  apply_env_vars: bool = True # NEU: Flag zur Steuerung der Umgebungsvariablen-Anwendung
                   ):
         """Konfiguriert den Logger mit zentralen Einstellungen."""
         
         with cls._lock:
+            # 1. Manuelle Parameter anwenden
             cls.min_level = min_level
             cls.format_type = format_type
             cls.show_metadata = show_metadata
@@ -1182,12 +1256,18 @@ class Logs:
             cls._remote_port = remote_port
             cls._sampling_rate = max(0.0, min(1.0, sampling_rate))
             
+            # 2. Umgebungsvariablen laden und überschreiben lassen
+            if apply_env_vars:
+                cls._load_env_config() # NEU: Aufruf zum Laden der Umgebungsvariablen
+            
+            # 3. Datei-Log final setzen (könnte von env_vars überschrieben worden sein)
             if log_file:
                 cls.log_file = Path(log_file) if isinstance(log_file, str) else log_file
                 if cls.log_file.parent:
                     cls.log_file.parent.mkdir(parents=True, exist_ok=True)
-            else:
-                cls.log_file = None
+            elif 'LOG_FILE' not in os.environ and not log_file:
+                 cls.log_file = None # explizit auf None setzen, wenn weder Parameter noch Env Var gesetzt ist
+
                 
             if category_filter:
                 cls._category_filter = [c.value for c in category_filter]
@@ -1224,4 +1304,7 @@ class Logs:
             return []
 
 # Registriere atexit-Funktion, um den Puffer beim Beenden zu leeren
-atexit.register(Logs._flush_buffer)
+atexit.register(logger._flush_buffer)
+
+# Rufe configure einmal beim Import auf, um Umgebungsvariablen sofort zu laden
+logger.configure(apply_env_vars=True)

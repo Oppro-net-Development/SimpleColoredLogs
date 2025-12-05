@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "SimpleColoredLogs"
-version = "1.2.2"
+version = "1.2.3"
 description = "Ein vollständiger, produktionsreifer Logger mit erweiterten Features für Python-Anwendungen und Discord Bots."
 readme = {file = "README.md", content-type = "text/markdown"}
 authors = [
@@ -17,6 +17,10 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+    "Intended Audience :: Developers"
+    
 ]
 requires-python = ">=3.7"
 dependencies = [

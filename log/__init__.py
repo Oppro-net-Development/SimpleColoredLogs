@@ -9,13 +9,18 @@ in einer einzigen logger.py zusammengeführt wurden.
 
 # Importiere alles aus der zusammengeführten logger.py
 from .logger import (
-    Logs,
+    logger, # Die Klasse wird als 'logger' importiert
     Category,
     CategoryColors,
     LogLevel,
     LogFormat,
     LevelColors
 )
+
+# WICHTIGE Korrektur: Alias erstellen, um 'logger' als 'Logs' zu exportieren und zu verwenden
+# Der Rest des Codes (LogContext, quick_start) hängt von diesem Namen ab!
+Logs = logger
+
 
 __all__ = [
     # Main Logger
@@ -48,11 +53,11 @@ class LogContext:
         self.context = context
 
     def __enter__(self):
-        Logs.push_context(self.context)
+        Logs.push_context(self.context) # Verwendet das Alias Logs
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        Logs.pop_context()
+        Logs.pop_context() # Verwendet das Alias Logs
 
 
 # Quick-Start Konfiguration
@@ -72,22 +77,17 @@ def quick_start(
         show_metadata: Zeige Datei/Zeile an
         colorize: Farbige Ausgabe
         auto_flush: Automatisches Flushen
-    
-    Example:
-        >>> from logs import quick_start, Logs, Category
-        >>> quick_start()
-        >>> Logs.info(Category.SYSTEM, "App started")
     """
     # Basis-Konfiguration über configure
-    Logs.configure(
+    Logs.configure( # Verwendet das Alias Logs
         log_file=log_file,
         min_level=min_level,
         show_metadata=show_metadata
     )
     
     # Zusätzliche Attribute direkt setzen (da configure diese ggf. nicht alle als Arg nimmt)
-    Logs.colorize = colorize
-    Logs.auto_flush = auto_flush
+    Logs.colorize = colorize # Verwendet das Alias Logs
+    Logs.auto_flush = auto_flush # Verwendet das Alias Logs
 
 
 # Convenience Imports für häufig genutzte Kategorien

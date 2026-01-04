@@ -8,11 +8,6 @@ Professional Terminal Logger für Python mit Farben, strukturiertem Logging und 
 pip install SimpleColoredLogs
 ```
 
-Optional mit Farb-Support:
-```bash
-pip install SimpleColoredLogs[color]
-```
-
 ## 🚀 Schnellstart
 
 ```python
